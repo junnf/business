@@ -37,16 +37,28 @@ function find_three_pid() {
 
 }
 
+#from pid get_mem_info
 function get_mem(){
- ps -aux | grep $1 | awk '{print $4}'
+    ps -aux | grep $1 | awk '{print $4}'
 }
 
-# echo $pid_array
+#from pid get_cpuinfo
+function get_cpu(){
+    ps -aux | grep $1 | awk '{print $3}'
+}
 
-# find_three_pid
-# echo ${pid_array[#]}
-# # cat netNode.cfg | grep -v '#' | cut -d',' -f-1
-# log=`get_date`
-# touch $log
-# `get_date` > $log
-get_mem "11600"
+echo $pid_array
+
+find_three_pid
+echo ${pid_array[#]}
+# cat netNode.cfg | grep -v '#' | cut -d',' -f-1
+
+#create log-file
+log=`get_date`
+touch $log
+
+#record time
+echo -n "文件创建时间" > $log
+`get_date` >> $log
+
+
