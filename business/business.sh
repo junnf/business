@@ -11,7 +11,13 @@ done
 
 #record time
 function get_date() {
-    echo `date +"%Y.%m.%d %H:%M"`
+    echo -n `date +"%Y.%m.%d %H:%M"`
+}
+
+function search_per_singledisk(){
+	###use expect
+	echo "Test!"
+
 }
 
 function find_pid_cpuinfo() {
@@ -47,6 +53,26 @@ function get_cpu(){
     ps -aux | grep $1 | awk '{print $3}'
 }
 
+function get_fd(){
+	lsof -p $1 | sort -v | uniq | grep -v "COMMAND" | wc -l
+}
+
+function get_time(){
+	ps -aux | grep $1 | awk 'print $10'
+}
+
+function get_hdisk_io(){
+	#not finish
+	#
+	echo "test result"
+}
+
+function get_hdisk_condition(){
+	#not finish
+	#
+	echo "test result"
+}
+
 echo $pid_array
 
 find_three_pid
@@ -58,7 +84,21 @@ log=`get_date`
 touch $log
 
 #record time
-echo -n "文件创建时间" > $log
+echo -n "file created time" > $log
 `get_date` >> $log
+echo -n "   NetNode"
+echo -n `cat netNode.cfg | grep "node" | awk "{print $2}"` >> $log
 
-
+for (( i = 0; i <3 ; i++ )); do
+		echo -n ${pid_array[$i]} >> $log
+		echo -n `get_cpu ${pid_array[$i]}` >> $log
+		echo -n `get_mem ${pid_array[$i]}` >> $log
+		echo -n `get_fd ${pid_array[$i]}` >> $log
+		echo -n `get_time ${pid_array[$i]}` >> $log
+		echo -n " Hours" >> $log
+		echo " " >> $log
+done
+ 
+echo -n "\n"
+`get_hdisk_io` >> $log
+`get_hdisk_condition` >> $log
