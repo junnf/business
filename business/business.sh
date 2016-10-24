@@ -11,7 +11,7 @@ done
 
 #record time
 function get_date() {
-    echo -n `date +"%Y.%m.%d %H:%M"`
+    echo -n `date +"%Y.%m.%d-%H:%M"`
 }
 
 function search_per_singledisk(){
@@ -45,16 +45,18 @@ function find_three_pid() {
 
 #from pid get_mem_info
 function get_mem(){
-    ps -aux | grep $1 | awk '{print $4}'
+    _tem=$1
+    ps -aux  | awk '{if('''$_tem'''==$2) print $4}' 
 }
 
 #from pid get_cpuinfo
 function get_cpu(){
-    ps -aux | grep $1 | awk '{print $3}'
+    _tem=$1
+    ps -aux  | awk '{if('''$_tem'''==$2) print $3}' 
 }
 
 function get_fd(){
-	lsof -p $1 | sort -v | uniq | grep -v "COMMAND" | wc -l
+	lsof -p $1 | sort -r | uniq | grep -v "COMMAND" | wc -l
 }
 
 function get_time(){
@@ -73,32 +75,59 @@ function get_hdisk_condition(){
 	echo "test result"
 }
 
-echo $pid_array
+function get_queue_num(){
+    free | grep "Mem" | awk '{print $3/$2*100"%"}'
+}
+
+function get_cpu_idle(){
+    vmstat 
+}
+
+###test data
+function test(){
+    #create log-file
+    log=`get_date`
+    touch $log
+
+    #record time
+    echo -n "file created time: " > $log
+    get_date >> $log
+    echo -en "\nNetNode " >> $log
+    echo -n `cat netNode.cfg | grep "node" | awk "{print $2}"` >> $log
+    echo -en "\n" >> $log
+    echo "pid   cpu   mem   fd"
+
+    for (( i = 0; i <3 ; i++ )); do
+            echo -n ${pid_array[$i]} "  " >> $log
+            echo -n `get_cpu ${pid_array[$i]}` " " >> $log
+            echo -n `get_mem ${pid_array[$i]}` " " >> $log
+            echo -n `get_fd ${pid_array[$i]}` " " >> $log
+            echo -n `get_time ${pid_array[$i]}` >> $log
+            # echo -n " Hours" >> $log
+            # echo " " >> $log
+            echo -en "\n" >> $log
+    done
+    echo -n "\n"
+    `get_hdisk_io` >> $log
+    # `get_hdisk_condition` >> $log
+}
 
 find_three_pid
-echo ${pid_array[#]}
-# cat netNode.cfg | grep -v '#' | cut -d',' -f-1
-
-#create log-file
 log=`get_date`
 touch $log
-
-#record time
-echo -n "file created time" > $log
-`get_date` >> $log
-echo -n "   NetNode"
-echo -n `cat netNode.cfg | grep "node" | awk "{print $2}"` >> $log
-
-for (( i = 0; i <3 ; i++ )); do
-		echo -n ${pid_array[$i]} >> $log
-		echo -n `get_cpu ${pid_array[$i]}` >> $log
-		echo -n `get_mem ${pid_array[$i]}` >> $log
-		echo -n `get_fd ${pid_array[$i]}` >> $log
-		echo -n `get_time ${pid_array[$i]}` >> $log
-		echo -n " Hours" >> $log
-		echo " " >> $log
+get_date > $log
+for (( i = 0; i < 3; i++ )); do
+    echo -n ${pid_array[$i]} >> $log
 done
- 
-echo -n "\n"
-`get_hdisk_io` >> $log
-`get_hdisk_condition` >> $log
+echo -en "\n"
+echo -n "Mem-used:" 
+echo -n `free | grep "Mem" | awk '{print $3/$2*100"%"}'` >> $log
+echo -n "Cpu-used:" 
+echo -n
+
+###cpu
+`get_queue_num` >> $log
+
+
+vmstat | grep -v procs | grep -v free | awk '{print }'
+vmstat | grep -v procs | grep -v free | awk '{print }'
