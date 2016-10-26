@@ -1,0 +1,70 @@
+spy使用
+    NAME         ENTRY       TID      PRI   total % (ticks)  delta % (ticks)
+------------ ------------ ----------  ---   ---------------  ---------------
+tIsr0        0x5ad1c      0x223eb08     0     0% (    5972)    0% (       0)
+tJobTask     0xccc9c      0x2242a68     0     0% (       0)    0% (       0)
+tExcTask     0xcc394      0x26a890      0     0% (       0)    0% (       0)
+tLogTask     logTask      0x2249568     0     0% (       0)    0% (       0)
+tFeedDog     FeedDogEntry 0x60691b8     0     0% (      21)    0% (       0)
+rx_los_main_ rx_los_main_ 0xaa56138     1     0% (       0)    0% (       0)
+tShell0      shellTask    0x30c1f30     1     0% (     581)    0% (       0)
+tWdbTask     0x188524     0x30b0818     3     0% (       0)    0% (       0)
+PTRACE       osa_taskComm 0x5f6f078     5     0% (   
+
+
+i 查看进程
+  NAME         ENTRY       TID    PRI   STATUS      PC       SP     ERRNO  DELAY
+----------  ------------ -------- --- ---------- -------- -------- ------- -----
+tIsr0       5ad1c         223eb08   0 PEND         18f198  223ea60       0     0
+tJobTask    ccc9c         2242a68   0 PEND         18f198  2242980       0     0
+tExcTask    cc394          26a890   0 PEND         18f198   26a790      16     0
+tLogTask    logTask       2249568   0 PEND         18cee4  22493f0       0     0
+tFeedDog    FeedDogEntry  60691b8   0 PEND         18f198  60690d0       0     0
+rx_los_mai> rx_los_main>  aa56138   1 PEND         18fae4  aa55f50  3d0004     0
+tShell0     shellTask     30c1f30   1 READY        1977f8  30c0100       0     0
+tWdbTask    188524        30b0818   3 PEND         18f198  30b0700       0     0
+PTRACE      osa_taskCom>  5f6f078   5 PEND         18f198  5f6ed50       0     0
+WosTask     osa_taskCom>  6045b10   5 PEND         18f198  60457e0       0     0
+TaskExcpCh> osa_taskCom>  604ee00   5 DELAY        196e04  604ea40       0     1
+WosExcpTas> osa_taskCom>  6058938   5 PEND         18f198  6058610       0     0
+WOS_SELF_T> osa_taskCom>  611e3c0   5 PEND         18f198  611df80       0     0
+tErfTask    65188         22463b8  10 PEND         18fae4  22462d0       0     0
+MID_OSA     osa_taskCom>  607f7b8  10 PEND         18f198  607f3b0       0     0
+MID_OSS     osa_taskCom>  6088c60  10 PEND         18f198  6088860       0     0
+TIMER_SELF> osa_taskCom>  610a968  10 DELAY        196e04  610a60
+
+memShow
+->memShow
+  status       bytes       blocks    avg block  max block
+ -------- -------------- ---------- ---------- ----------
+current
+ free          149037088          6   24839514  149035096
+ alloc         320434736     448718        714          -
+ internal            616          3        205          -
+cumulative
+ alloc       22138728680   42896664        516          -
+peak
+ alloc         323438520          -          -          -
+
+
+RecvLog
+Bmu run time 110685(s) = 30(h) 44(m) 45(s)
+
+Receive command summary:
+Item        Time         SourceIp   CmdCode   Length Character
+$$01 2016-10-26 16:22:01 0x0a1afefa 0x00b100      7 0x00
+
+   1 2016-10-26 16:50:09 0x0a1afefa 0x202600      0 0x00
+   2 2016-10-26 16:50:08 0x0a1afefa 0x71000d      0 0x00
+   3 2016-10-26 16:50:01 0x0a1a00fc 0x123456     30 0x00
+   4 2016-10-26 16:49:58 0x0a1afefa 0x71000d      0 0x00
+   5 2016-10-26 16:49:54 0x0a1afefa 0x202600      0 0x00
+   6 2016-10-26 16:49:48 0x0a1afefa 0x71000d      0 0x00
+   7 2016-10-26 16:49:41 0x0a1afefa 0x202600      0 0x00
+   8 2016-10-26 16:49:39 0x0a1afefa 0x71000d      0 0x00
+   9 2016-10-26 16:49:29 0x0a1afefa 0x71000d      0 0x00
+  10 2016-10-26 16:49:26 0x0a1afefa 0x202600      0 0x00
+
+The items exclude get_alm, get_pm, get_state.
+
+The input parameter is output items number and start i

@@ -2,6 +2,9 @@
 
 #load the cfg
 #test load file
+#this part is used in Linux, and use 
+#Expect,Telnet to communicate with VxWorks
+#
 
 declare -a pid_array
 
