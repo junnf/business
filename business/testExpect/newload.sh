@@ -25,7 +25,7 @@ function important_test(){
 
 
 # `init_prepare`
-
+# pass!
 function get_mem() {
     /usr/bin/expect<<EXP
     spawn telnet $1
@@ -40,7 +40,7 @@ function get_mem() {
 EXP
     free=`cat .temp.txt | grep -e 'free' | awk '{print $2}'`
     alloc=`cat .temp.txt | grep -e 'allo' | awk '{if(NR==1){print $2}}'`
-    result=`echo $free`
+    result=`echo $free $alloc | awk '{print 100*$2/($1+$2)"%"}'`
     ############!!!slots type!!
     echo -ne "" > .temp.txt
 }
