@@ -18,7 +18,6 @@ function get_date() {
 }
 
 function search_per_singledisk(){
-	###use expect
 	echo "Test!"
 
 }
